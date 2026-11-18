@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حقك عليا يا ملك ❤️</title>
+    <!-- تحميل مكتبة Tailwind CSS للتصميم المتجاوب -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- تحميل خطوط عربية حديثة ورومانسية (Cairo & Amiri) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        amiri: ['Amiri', 'serif'],
+                    },
+                    colors: {
+                        roseBlush: '#fff0f3',
+                        softPink: '#ffccd5',
+                        warmRose: '#ff4d6d',
+                        deepRose: '#c9184a',
+                        creamGold: '#fff8f0',
+                        accentGold: '#d4a373'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* تنسيقات مخصصة للحركات الرومانسية والزجاجية */
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #fff0f3 0%, #fff8f0 50%, #ffe5ec 100%);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1.5px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 20px 45px rgba(201, 24, 74, 0.08);
+        }
+
+        /* نبض القلب في الشاشة الافتتاحية */
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.18); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.12); }
+            60% { transform: scale(1); }
+        }
+        .animate-heartbeat {
+            animation: heartbeat 2s infinite ease-in-out;
+        }
+
+        /* طفو القلوب والبتلات في الخلفية */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(105vh) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            15% {
+                opacity: 0.75;
+            }
+            85% {
+                opacity: 0.75;
+            }
+            100% {
+                transform: translateY(-15vh) rotate(360deg) scale(1.1);
+                opacity: 0;
+            }
+        }
+        .floating-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatUp linear infinite;
+        }
+
+        /* تأثير اللمعان على زرار المسامحة */
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 0 0 18px rgba(255, 77, 109, 0.45), 0 8px 20px rgba(201, 24, 74, 0.25);
+            }
+            50% {
+                box-shadow: 0 0 32px rgba(255, 77, 109, 0.8), 0 12px 28px rgba(201, 24, 74, 0.4);
+            }
+        }
+        .glow-btn {
+            animation: pulseGlow 2.2s infinite ease-in-out;
+        }
+
+        /* تأثير ظهور الأقسام بنعومة */
+        .fade-in-up {
+            animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* بطاقات الأسباب القابلة للفتح */
+        .reason-card {
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .reason-card:active {
+            transform: scale(0.98);
+        }
+
+        /* كانفاس الاحتفال */
+        #confettiCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body class="text-rose-950 antialiased selection:bg-rose-200 selection:text-rose-900">
+
+    <!-- حاوية القلوب والبتلات العائمة في الخلفية -->
+    <div id="particles-container" aria-hidden="true"></div>
+
+    <!-- كانفاس القصاصات الملونة والقلوب عند المسامحة -->
+    <canvas id="confettiCanvas"></canvas>
+
+    <!-- إشعار منبثق أنيق (بديل alert) -->
+    <div id="toastNotification" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden opacity-0 transition-all duration-300">
+        <div class="bg-rose-900 text-white px-6 py-3.5 rounded-full shadow-2xl flex items-center gap-2.5 text-sm sm:text-base font-semibold border border-rose-400/30">
+            <span id="toastIcon">💌</span>
+            <span id="toastMessage">تم النسخ بنجاح!</span>
+        </div>
+    </div>
+
+    <!-- الحاوية الرئيسية للتطبيق -->
+    <main class="relative z-10 max-w-xl mx-auto px-4 py-8 sm:py-12 min-h-screen flex flex-col justify-center">
+
+        <!-- 1. الشاشة الافتتاحية (Hero / Opening Screen) -->
+        <section id="heroSection" class="glass-card rounded-3xl p-7 sm:p-10 text-center fade-in-up">
+            <!-- أيقونة ظرف وقلب نابض -->
+            <div class="relative inline-flex items-center justify-center w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-tr from-rose-100 to-amber-50 shadow-inner mb-6 border border-rose-200/70">
+                <span class="text-5xl sm:text-6xl animate-heartbeat select-none">💝</span>
+                <span class="absolute -top-1 -right-1 text-xl animate-bounce">✨</span>
+            </div>
+
+            <span class="inline-block px-4 py-1.5 rounded-full bg-rose-100/80 text-deepRose text-xs sm:text-sm font-bold mb-4 border border-rose-200">
+                رسالة خاصة لـ ملك قلبي 👑
+            </span>
+
+            <h1 class="font-amiri text-3xl sm:text-5xl font-bold text-deepRose leading-snug mb-4">
+                حقك عليا يا ملوكة..
+            </h1>
+
+            <p class="text-rose-800/90 text-base sm:text-lg leading-relaxed mb-8 max-w-md mx-auto">
+                عارف إني غلطت واتأخرت عليكي، ورغم المسافات والبلاد اللي بينا، مفيش حاجة في الدنيا تهون عليا قد زعلك يا ملك أو لحظة انتظار استنيتيها عشاني.
+            </p>
+
+            <button onclick="openLoveLetter()" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-warmRose to-deepRose text-white font-bold text-lg shadow-lg hover:brightness-105 active:scale-95 transition-all duration-200 flex items-center justify-center gap-3 mx-auto glow-btn cursor-pointer">
+                <span>افتحي رسالتي ليكي يا ملك</span>
+                <span class="text-2xl">💌</span>
+            </button>
+        </section>
+
+        <!-- 2. محتوى الرسالة والتفاعلات (يظهر بعد الضغط على فتح الرسالة) -->
+        <div id="letterContent" class="hidden space-y-6 sm:space-y-8">
+
+            <!-- بطاقة الاعتذار الصادق -->
+            <section class="glass-card rounded-3xl p-6 sm:p-9 fade-in-up">
+                <div class="flex items-center justify-between border-b border-rose-200/70 pb-4 mb-5">
+                    <div class="flex items-center gap-2.5">
+                        <span class="text-2xl">🌍❤️</span>
+                        <h2 class="font-amiri text-2xl sm:text-3xl font-bold text-deepRose">كلام من قلبي لـ ملك</h2>
+                    </div>
+                    <span class="text-xs font-semibold text-amber-700 bg-amber-100/80 px-3 py-1 rounded-full border border-amber-200">
+                        وعد مش هتتكرر
+                    </span>
+                </div>
+
+                <div class="space-y-4 text-rose-950/90 text-base sm:text-lg leading-loose font-medium">
+                    <p>
+                        يا ملك، أنا آسف بجد من كل قلبي. قعدة القهوة خدتني والوقت سرقني من غير ما أحس، ونسيت إن أغلى إنسانة في حياتي مستنياني على نار وبتعد الدقايق عشان نتكلم سوا.
+                    </p>
+                    <p>
+                        حتى لو إنتي في بلد وأنا في بلد، وقتنا سوا وكلامنا هما الحاجة الوحيدة اللي بتهون عليا البعد والمسافات. مفيش أي قعدة ولا صحاب في الدنيا كلها تسوى إنك تضايقي أو تحسي إني قصرت في حقك ولو ثانية واحدة.
+                    </p>
+                    <p class="font-amiri text-xl sm:text-2xl text-deepRose font-bold pt-2 text-center">
+                        "مهما بعدت بينا البلاد يا ملوكة.. إنتي أقرب حد لقلبي وروحي ❤️"
+                    </p>
+                </div>
+            </section>
+
+            <!-- بطاقات تفاعلية: أسباب تخليكي تسامحيني -->
+            <section class="glass-card rounded-3xl p-6 sm:p-8 fade-in-up" style="animation-delay: 0.15s;">
+                <div class="text-center mb-6">
+                    <h3 class="font-amiri text-2xl sm:text-3xl font-bold text-deepRose mb-1.5">
+                        أسباب تخلي ملوكة تسامحني 🥺
+                    </h3>
+                    <p class="text-xs sm:text-sm text-rose-700">دوسي على كل قلب عشان تشوفي الكلام المستخبي جواه</p>
+                </div>
+
+                <div class="grid grid-cols-1 gap-3.5" id="reasonsContainer">
+                    <!-- السبب الأول -->
+                    <button type="button" onclick="toggleReason(this)" class="reason-card w-full text-right p-4 sm:p-5 rounded-2xl bg-white/80 hover:bg-white border border-rose-200 shadow-sm flex flex-col gap-2 cursor-pointer">
+                        <div class="flex items-center justify-between w-full">
+                            <span class="font-bold text-rose-900 text-base sm:text-lg flex items-center gap-2.5">
+                                <span class="text-xl">💖</span>
+                                <span>السبب الأول.. دوسي هنا يا ملك</span>
+                            </span>
+                            <span class="reason-badge text-xs bg-rose-100 text-deepRose px-3 py-1 rounded-full font-bold">افتحي</span>
+                        </div>
+                        <p class="reason-text hidden text-rose-800 text-sm sm:text-base leading-relaxed pt-2 border-t border-rose-100">
+                            عشان إنتي أغلى حد في حياتي كلها يا ملك، ويومي مبيكملش غير لما أسمع صوتك وأطمن إنك مبسوطة ومرتاحة مهما كانت المسافة بينا.
+                        </p>
+                    </button>
+
+                    <!-- السبب الثاني -->
+                    <button type="button" onclick="toggleReason(this)" class="reason-card w-full text-right p-4 sm:p-5 rounded-2xl bg-white/80 hover:bg-white border border-rose-200 shadow-sm flex flex-col gap-2 cursor-pointer">
+                        <div class="flex items-center justify-between w-full">
+                            <span class="font-bold text-rose-900 text-base sm:text-lg flex items-center gap-2.5">
+                                <span class="text-xl">🌹</span>
+                                <span>السبب الثاني.. دوسي هنا يا ملوكة</span>
+                            </span>
+                            <span class="reason-badge text-xs bg-rose-100 text-deepRose px-3 py-1 rounded-full font-bold">افتحي</span>
+                        </div>
+                        <p class="reason-text hidden text-rose-800 text-sm sm:text-base leading-relaxed pt-2 border-t border-rose-100">
+                            عشان كفاية عليا غربة المسافات، مش هستحمل كمان زعل قلبك يا ملك! ومفيش قعدة قهوة في الكون تسوى لحظة واحدة تستنيني فيها وتزعلي.
+                        </p>
+                    </button>
+
+                    <!-- السبب الثالث -->
+                    <button type="button" onclick="toggleReason(this)" class="reason-card w-full text-right p-4 sm:p-5 rounded-2xl bg-white/80 hover:bg-white border border-rose-200 shadow-sm flex flex-col gap-2 cursor-pointer">
+                        <div class="flex items-center justify-between w-full">
+                            <span class="font-bold text-rose-900 text-base sm:text-lg flex items-center gap-2.5">
+                                <span class="text-xl">✨</span>
+                                <span>السبب الثالث.. دوسي هنا يا ست البنات</span>
+                            </span>
+                            <span class="reason-badge text-xs bg-rose-100 text-deepRose px-3 py-1 rounded-full font-bold">افتحي</span>
+                        </div>
+                        <p class="reason-text hidden text-rose-800 text-sm sm:text-base leading-relaxed pt-2 border-t border-rose-100">
+                            عشان ضحكتك في الكول هي اللي بترد فيا الروح، ومجهزلك تعويض حلو أونلاين دلوقتي غير هديتك الكبيرة المتشالة لأول لحظة نتقابل فيها.
+                        </p>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 3. لعبة الصلح التفاعلية (The Playful Forgiveness Game) -->
+            <section id="forgivenessCard" class="glass-card rounded-3xl p-6 sm:p-9 text-center relative overflow-hidden fade-in-up" style="animation-delay: 0.3s; min-height: 290px;">
+                <div class="mb-2 text-4xl">🥺👉👈</div>
+                <h3 class="font-amiri text-2xl sm:text-4xl font-bold text-deepRose mb-2">
+                    ها يا ملك.. قلبك الأبيض سامحني؟
+                </h3>
+                <p id="pleadingSubtext" class="text-sm sm:text-base text-rose-700 mb-8 min-h-[24px] font-medium">
+                    اختاري بصراحة يا ملوكة بس خلي بالك من الزرار التاني 😉
+                </p>
+
+                <!-- منطقة الأزرار التفاعلية -->
+                <div id="buttonsArena" class="relative flex flex-col sm:flex-row items-center justify-center gap-4 min-h-[120px]">
+                    <!-- زرار المسامحة المتوهج -->
+                    <button id="forgiveBtn" onclick="celebrateForgiveness()" class="z-20 px-8 py-4 rounded-2xl bg-gradient-to-r from-warmRose to-deepRose text-white font-extrabold text-lg sm:text-xl shadow-xl transition-all duration-300 glow-btn cursor-pointer flex items-center gap-2">
+                        <span>مسامحاك ❤️</span>
+                    </button>
+
+                    <!-- زرار لسه زعلانة الهارب -->
+                    <button id="runawayBtn" type="button" class="z-10 px-6 py-3.5 rounded-2xl bg-white/90 text-rose-800 border-2 border-rose-300 font-bold text-base shadow-md transition-all duration-200 cursor-pointer select-none">
+                        لسه زعلانة 😤
+                    </button>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- 4. شاشة الاحتفال وكوبون التعويض (تظهر عند الضغط على مسامحاك) -->
+        <section id="celebrationSection" class="hidden glass-card rounded-3xl p-6 sm:p-10 text-center fade-in-up">
+            <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-tr from-rose-200 to-amber-100 mb-5 shadow-md animate-heartbeat">
+                <span class="text-5xl">🥰</span>
+            </div>
+
+            <h2 class="font-amiri text-3xl sm:text-4xl font-bold text-deepRose mb-3 leading-snug">
+                كنت عارف إن قلبك طيب يا ملك وميهونش عليكي زعلي ❤️
+            </h2>
+
+            <p class="text-rose-800 text-base sm:text-lg mb-7 leading-relaxed">
+                ربنا يخليكي ليا يا ملوكة ويجمعنا على خير قريب أوي! وعشان أثبتلك إني هعوضك رغم المسافات، اختاري هديتك من كوبون الصلح ده:
+            </p>
+
+            <!-- كوبون صلح وتعويض للمسافات -->
+            <div class="bg-gradient-to-br from-creamGold via-white to-roseBlush border-2 border-dashed border-accentGold rounded-3xl p-5 sm:p-7 mb-7 shadow-inner text-right relative">
+                <div class="flex items-center justify-between border-b border-amber-200/80 pb-3 mb-4">
+                    <span class="font-extrabold text-amber-800 text-base sm:text-lg flex items-center gap-2">
+                        <span>🎟️</span>
+                        <span>كوبون صلح مخصوص لـ ملك</span>
+                    </span>
+                    <span class="text-xs bg-rose-500 text-white px-2.5 py-1 rounded-full font-bold">ساري فوراً</span>
+                </div>
+
+                <p class="text-xs sm:text-sm text-rose-700 font-semibold mb-3">
+                    اختاري التعويض اللي على مزاجك دلوقتي (أو اختاريهم كلهم!):
+                </p>
+
+                <div class="space-y-2.5" id="voucherOptions">
+                    <label class="flex items-center gap-3 p-3.5 rounded-2xl bg-white/90 border border-rose-200 cursor-pointer hover:border-warmRose transition-all">
+                        <input type="radio" name="reward" value="سهرة كول مفتوحة للصبح نحكي فيها في كل حاجة 📞❤️" checked class="w-5 h-5 accent-deepRose">
+                        <span class="font-bold text-rose-950 text-sm sm:text-base">سهرة كول مفتوحة للصبح نحكي فيها في كل حاجة 📞❤️</span>
+                    </label>
+
+                    <label class="flex items-center gap-3 p-3.5 rounded-2xl bg-white/90 border border-rose-200 cursor-pointer hover:border-warmRose transition-all">
+                        <input type="radio" name="reward" value="نتفرج على فيلم أو مسلسل سوا أونلاين 🎬🍿" class="w-5 h-5 accent-deepRose">
+                        <span class="font-bold text-rose-950 text-sm sm:text-base">نتفرج على فيلم أو مسلسل سوا أونلاين 🎬🍿</span>
+                    </label>
+
+                    <label class="flex items-center gap-3 p-3.5 rounded-2xl bg-white/90 border border-rose-200 cursor-pointer hover:border-warmRose transition-all">
+                        <input type="radio" name="reward" value="فويس نوت طويل أقولك فيه قد إيه بحبك وبعتذرلك 🎙️💌" class="w-5 h-5 accent-deepRose">
+                        <span class="font-bold text-rose-950 text-sm sm:text-base">فويس نوت طويل تقولي فيه قد إيه بتحبني وبتعتذرلي 🎙️💌</span>
+                    </label>
+
+                    <label class="flex items-center gap-3 p-3.5 rounded-2xl bg-white/90 border border-rose-200 cursor-pointer hover:border-warmRose transition-all">
+                        <input type="radio" name="reward" value="أول خروجة وأحلى هدية متشالة ليكي أول ما نتقابل ✈️💐" class="w-5 h-5 accent-deepRose">
+                        <span class="font-bold text-rose-950 text-sm sm:text-base">أول خروجة وأحلى هدية متشالة ليا أول ما نتقابل ✈️💐</span>
+                    </label>
+
+                    <label class="flex items-center gap-3 p-3.5 rounded-2xl bg-white/90 border border-rose-200 cursor-pointer hover:border-warmRose transition-all">
+                        <input type="radio" name="reward" value="كل اللي فوق دول مع بعض عشان أنا ملك وأستاهل 👑❤️" class="w-5 h-5 accent-deepRose">
+                        <span class="font-bold text-deepRose text-sm sm:text-base">كل اللي فوق دول مع بعض عشان أنا ملوكة وأستاهل 👑❤️</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- أزرار إرسال الاختيار -->
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <button onclick="shareViaWhatsApp()" class="w-full sm:w-auto px-6 py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                    <span>ابعتيلي اختيارك واتساب</span>
+                    <span class="text-xl">💚</span>
+                </button>
+
+                <button onclick="copyVoucherChoice()" class="w-full sm:w-auto px-6 py-4 rounded-2xl bg-rose-100 hover:bg-rose-200 text-deepRose font-bold text-base border border-rose-300 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                    <span>نسخ رسالة الصلح</span>
+                    <span class="text-xl">📋</span>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // ==========================================
+        // 1. توليد القلوب والبتلات العائمة في الخلفية
+        // ==========================================
+        function createFloatingParticles() {
+            const container = document.getElementById('particles-container');
+            const symbols = ['❤️', '🌸', '💖', '✨', '🌹', '💕'];
+            const particleCount = 18;
+
+            for (let i = 0; i < particleCount; i++) {
+                const span = document.createElement('span');
+                span.className = 'floating-particle select-none';
+                span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                
+                const leftPos = Math.random() * 100;
+                const duration = 9 + Math.random() * 10;
+                const delay = Math.random() * 8;
+                const fontSize = 14 + Math.random() * 16;
+
+                span.style.left = `${leftPos}vw`;
+                span.style.animationDuration = `${duration}s`;
+                span.style.animationDelay = `${delay}s`;
+                span.style.fontSize = `${fontSize}px`;
+
+                container.appendChild(span);
+            }
+        }
+
+        // ==========================================
+        // 2. الانتقال من الشاشة الافتتاحية للرسالة
+        // ==========================================
+        function openLoveLetter() {
+            const hero = document.getElementById('heroSection');
+            const content = document.getElementById('letterContent');
+
+            hero.style.opacity = '0';
+            hero.style.transform = 'scale(0.95)';
+            hero.style.transition = 'all 0.4s ease';
+
+            setTimeout(() => {
+                hero.classList.add('hidden');
+                content.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 350);
+        }
+
+        // ==========================================
+        // 3. فتح وغلق بطاقات أسباب المسامحة
+        // ==========================================
+        function toggleReason(cardElement) {
+            const textEl = cardElement.querySelector('.reason-text');
+            const badgeEl = cardElement.querySelector('.reason-badge');
+            const isHidden = textEl.classList.contains('hidden');
+
+            if (isHidden) {
+                textEl.classList.remove('hidden');
+                badgeEl.textContent = 'تم الفتح ❤️';
+                badgeEl.classList.replace('bg-rose-100', 'bg-rose-500');
+                badgeEl.classList.replace('text-deepRose', 'text-white');
+                cardElement.classList.add('ring-2', 'ring-rose-300', 'bg-white');
+            } else {
+                textEl.classList.add('hidden');
+                badgeEl.textContent = 'افتحي';
+                badgeEl.classList.replace('bg-rose-500', 'bg-rose-100');
+                badgeEl.classList.replace('text-white', 'text-deepRose');
+                cardElement.classList.remove('ring-2', 'ring-rose-300', 'bg-white');
+            }
+        }
+
+        // ==========================================
+        // 4. منطق الزرار الهارب (لسه زعلانة) وتكبير زرار المسامحة
+        // ==========================================
+        const runawayBtn = document.getElementById('runawayBtn');
+        const forgiveBtn = document.getElementById('forgiveBtn');
+        const pleadingSubtext = document.getElementById('pleadingSubtext');
+        const forgivenessCard = document.getElementById('forgivenessCard');
+
+        const pleadingPhrases = [
+            "بلاش الزعل ده يا ملك 🥺",
+            "طب عشان خاطري يا ملوكة!",
+            "هعوضك بأحلى سهرة كول للصبح!",
+            "مش هتقدري تدوسي هنا يا ملك 😂",
+            "قلبك أبيض وأنا عارف ❤️",
+            "خلاص بقى فكيها شوية يا ملوكة 😍",
+            "الزرار ده بايظ دوسي التاني 😉"
+        ];
+
+        let dodgeCount = 0;
+        let forgiveScale = 1;
+
+        function moveRunawayButton(e) {
+            if (e) e.preventDefault();
+
+            dodgeCount++;
+
+            // تغيير النص بعبارة لطيفة
+            const phrase = pleadingPhrases[(dodgeCount - 1) % pleadingPhrases.length];
+            runawayBtn.textContent = phrase;
+            pleadingSubtext.textContent = "شايفة يا ملك؟ حتى الزرار مش راضي يخليكي زعلانة ❤️";
+
+            // تكبير زرار "مسامحاك" تدريجياً بحد أقصى مناسب للموبايل
+            if (forgiveScale < 1.38) {
+                forgiveScale += 0.07;
+                forgiveBtn.style.transform = `scale(${forgiveScale})`;
+            }
+
+            // حساب حدود الحركة داخل بطاقة اللعبة بأمان تام
+            const cardRect = forgivenessCard.getBoundingClientRect();
+            const btnRect = runawayBtn.getBoundingClientRect();
+
+            const padding = 20;
+            const maxX = Math.max(20, cardRect.width - btnRect.width - padding * 2);
+            const maxY = Math.max(20, cardRect.height - btnRect.height - padding * 2);
+
+            const randomX = Math.floor(Math.random() * maxX) + padding;
+            const randomY = Math.floor(Math.random() * maxY) + padding;
+
+            runawayBtn.style.position = 'absolute';
+            runawayBtn.style.left = `${randomX}px`;
+            runawayBtn.style.top = `${randomY}px`;
+        }
+
+        // دعم الماوس واللمس على الموبايل
+        runawayBtn.addEventListener('mouseenter', moveRunawayButton);
+        runawayBtn.addEventListener('touchstart', moveRunawayButton, { passive: false });
+        runawayBtn.addEventListener('click', moveRunawayButton);
+
+        // ==========================================
+        // 5. شاشة الاحتفال والكونفيتي عند المسامحة
+        // ==========================================
+        function celebrateForgiveness() {
+            const letterContent = document.getElementById('letterContent');
+            const celebrationSection = document.getElementById('celebrationSection');
+
+            letterContent.classList.add('hidden');
+            celebrationSection.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            startConfettiAnimation();
+        }
+
+        // ==========================================
+        // 6. مشاركة ونسخ كوبون التعويض
+        // ==========================================
+        function getSelectedRewardText() {
+            const selectedRadio = document.querySelector('input[name="reward"]:checked');
+            const rewardValue = selectedRadio ? selectedRadio.value : "سهرة كول مفتوحة للصبح 📞❤️";
+            return `خلاص قلب ملك الأبيض سامحك ❤️\nواخترت من كوبون الصلح:\n"${rewardValue}"\nيلا مستنياك تعوضني رغم المسافات 😉💌`;
+        }
+
+        function showToast(message, icon = '💌') {
+            const toast = document.getElementById('toastNotification');
+            const toastMsg = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMsg.textContent = message;
+            toastIcon.textContent = icon;
+
+            toast.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                toast.classList.remove('opacity-0');
+                toast.classList.add('opacity-100');
+            });
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 3000);
+        }
+
+        function copyVoucherChoice() {
+            const textToCopy = getSelectedRewardText();
+            const tempTextarea = document.createElement('textarea');
+            tempTextarea.value = textToCopy;
+            tempTextarea.style.position = 'fixed';
+            tempTextarea.style.opacity = '0';
+            document.body.appendChild(tempTextarea);
+            tempTextarea.select();
+
+            try {
+                document.execCommand('copy');
+                showToast('اتنسخت الرسالة! ابعتيها ليا حالاً ❤️', '📋');
+            } catch (err) {
+                showToast('حصلت مشكلة بسيطة، جربي تاني', '⚠️');
+            } finally {
+                document.body.removeChild(tempTextarea);
+            }
+        }
+
+        function shareViaWhatsApp() {
+            const text = encodeURIComponent(getSelectedRewardText());
+            const whatsappUrl = `https://wa.me/?text=${text}`;
+            window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+        }
+
+        // ==========================================
+        // 7. رسم حركة القلوب والقصاصات الاحتفالية (Canvas)
+        // ==========================================
+        function startConfettiAnimation() {
+            const canvas = document.getElementById('confettiCanvas');
+            const ctx = canvas.getContext('2d');
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const pieces = [];
+            const colors = ['#ff4d6d', '#ff758f', '#ffb3c1', '#d4a373', '#fbbf24', '#c9184a'];
+            const emojis = ['❤️', '💖', '🌹', '✨'];
+
+            for (let i = 0; i < 85; i++) {
+                pieces.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: 8 + Math.random() * 10,
+                    speedY: 2.5 + Math.random() * 4,
+                    speedX: (Math.random() - 0.5) * 3,
+                    rotation: Math.random() * 360,
+                    rotationSpeed: (Math.random() - 0.5) * 6,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    isEmoji: Math.random() > 0.65,
+                    emoji: emojis[Math.floor(Math.random() * emojis.length)]
+                });
+            }
+
+            let animationFrames = 0;
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                animationFrames++;
+
+                pieces.forEach(p => {
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+                    p.rotation += p.rotationSpeed;
+
+                    if (p.y > canvas.height + 20 && animationFrames < 280) {
+                        p.y = -20;
+                        p.x = Math.random() * canvas.width;
+                    }
+
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate((p.rotation * Math.PI) / 180);
+
+                    if (p.isEmoji) {
+                        ctx.font = `${p.size * 1.6}px serif`;
+                        ctx.textAlign = 'center';
+                        ctx.fillText(p.emoji, 0, 0);
+                    } else {
+                        ctx.fillStyle = p.color;
+                        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+                    }
+                    ctx.restore();
+                });
+
+                if (animationFrames < 420) {
+                    requestAnimationFrame(animate);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+
+            animate();
+        }
+
+        // تشغيل القلوب الخلفية عند تحميل الصفحة
+        window.onload = function() {
+            createFloatingParticles();
+        };
+    </script>
+</body>
+</html>
